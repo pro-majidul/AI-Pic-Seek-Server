@@ -4,6 +4,7 @@ const app = express();
 const cors = require("cors");
 const { logger } = require("./middleware/logger");
 const UploadImageBBGetURL = require("../utils/ai/generateImageURL");
+const generateImageBuffer = require("../utils/ai/genarateImageBuffer");
 
 //middleware
 app.use(cors());
@@ -20,14 +21,21 @@ app.post("/create-image", async (req, res) => {
       status: 400,
       message: "Please provide email, username , prompt, category , userImg",
     });
-    // 1 + 2 generate a final prompt + generate a ImageBuffer
-    const buffer = await generateImageBuffer(prompt, category);
-    // 3 convert ImageBuffer into ImageUrl and upload on Imagebb
-    const imageURL = await UploadImageBBGetURL(buffer, prompt);
-    const finalImageURL = imageURL?.data?.display_url;
-    // 4 Insert data in database
+    return;
   }
-  res.send({});
+  // 1 + 2 generate a final prompt + generate a ImageBuffer
+  const buffer = await generateImageBuffer(prompt, category);
+
+  // 3 convert ImageBuffer into ImageUrl and upload on Imagebb
+  const imageURL = await UploadImageBBGetURL(buffer, prompt);
+
+  const finalImageURL = imageURL?.data?.display_url;
+
+  res.send(finalImageURL);
+
+  // 4 Insert data in database
+
+  // 5 send response in frontend
 });
 
 app.get("/", (req, res) => {
