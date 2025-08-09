@@ -5,6 +5,7 @@ const cors = require("cors");
 const { logger } = require("./middleware/logger");
 const UploadImageBBGetURL = require("../utils/ai/generateImageURL");
 const generateImageBuffer = require("../utils/ai/genarateImageBuffer");
+const { imageCollection } = require("../utils/ConnectDB");
 
 //middleware
 app.use(cors());
@@ -32,11 +33,28 @@ app.post("/create-image", async (req, res) => {
 
   const finalImageURL = imageURL?.data?.display_url;
 
-  res.send(finalImageURL);
+  // res.send(finalImageURL);
 
   // 4 Insert data in database
 
+  const documents = {
+    email,
+    username,
+    prompt,
+    category,
+    userImg,
+    finalImageURL,
+    createdAt: new Date().toISOString(),
+  };
+  const result = await imageCollection.insertOne(documents);
+  res.status(200).send({
+    ...result,
+    finalImageURL
+  });
+  console.log(result);
+
   // 5 send response in frontend
+  // res.send(result);
 });
 
 app.get("/", (req, res) => {
