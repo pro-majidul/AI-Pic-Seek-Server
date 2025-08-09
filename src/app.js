@@ -13,7 +13,8 @@ app.use(logger);
 
 app.post("/create-image", async (req, res) => {
   const { email, username, prompt, category, userImg } = req.body;
-  if (email || username || prompt || category || userImg) {
+
+  if (!email || !username || !prompt || !category || !userImg) {
     res.status(400).send({
       status: 400,
       message: "Please provide email, username , prompt, category , userImg",

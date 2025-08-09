@@ -1,8 +1,10 @@
+//definition 
 const app = require("./src/app");
-const {ConnectDB} = require("./utils/ConnectDB");
+const { ConnectDB } = require("./utils/ConnectDB");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 
+//Database Connection
 ConnectDB()
   .then(() => {
     app.listen(port, () => {
