@@ -45,4 +45,14 @@ const insertAiImage = async (req, res) => {
   // res.send(result);
 };
 
-module.exports = insertAiImage;
+const getAllImages = async (req, res) => {
+  try {
+    const result = await imageCollection.find().toArray();
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+};
+
+module.exports = {insertAiImage,getAllImages};
