@@ -36,4 +36,27 @@ const postUserComment = async (req, res) => {
   }
 };
 
-module.exports = { postUserComment };
+const getAllComments = async (req, res) => {
+  try {
+    const { imageId, email } = req.params;
+    if (!imageId || !email) {
+      return res.status(400).send({
+        status: 400,
+        message: "Please provide a valid imageId  and email address ",
+      });
+    }
+    const comments = await commentCollection
+      .find({ imageId, email })
+      .project({ reply: 1, comment: 1, _id: 0 })
+      .toArray();
+    res.send(comments);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      status: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+module.exports = { postUserComment, getAllComments };

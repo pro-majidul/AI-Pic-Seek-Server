@@ -1,8 +1,11 @@
 const express = require("express");
-const { postUserComment } = require("../controllers/comment.controller");
+const {
+  postUserComment,
+  getAllComments,
+} = require("../controllers/comment.controller");
 const commentRouter = express.Router();
 
-// commentRouter.get("/image/:imageId");
+commentRouter.get("/chat/:imageId/:email", getAllComments);
 // commentRouter.post('/image/:imageId')
 
 commentRouter.post("/create", postUserComment);
